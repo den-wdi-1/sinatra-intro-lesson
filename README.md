@@ -136,7 +136,7 @@ What would be the code we would add in the ``views/index.erb`` file to display a
 ```ruby
 	<ul>
 		<% @team_members.each do |member| %>
-			<li><%= member[:name] %> &mdash; <%= member[:high5s] %> </li>
+			<li><%= member["name"] %> &mdash; <%= member["high5s"] %> </li>
 		<% end %>
 	</ul> 
 ```	
