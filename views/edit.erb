@@ -1,0 +1,12 @@
+<form action='/team_members/<%= params['id']%>' method='post'>
+	<input type="hidden" name="_method" value="put">
+	<div class="form-group">
+		<input type="text" name="name" value="<%= @team_member['name']%>" class="form-control" />
+	</div>
+	<div class="form-group">	
+		<input type="text" name="high5s" value="<%= @team_member['high5s']%>" class="form-control"/>
+	</div>
+	<div class="form-group">	
+		<input type="submit" value="Update team member." class="btn btn-default" />
+	</div>
+</form>
