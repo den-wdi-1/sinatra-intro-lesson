@@ -24,8 +24,8 @@ Gemfile. The second is called the ``config.ru``. This file helps configure the R
 and provides the basics web server functionality. The final file is often called the Sinatra app and is very similar to an
 Express controller file. 
 
-Lets start with the Gemfile. The first run the command ``bundle init``. This creates the Gemfile. We'll install two Gems Sinatra 
-and rerun, the Ruby version of nodemon.
+Lets start with the Gemfile. First, run the command ``bundle init``. This creates the Gemfile. We'll install two Gems: ``Sinatra ``
+and ``rerun``, the Ruby version of nodemon.
 
 Here's our final Gemfile: 
 
@@ -42,7 +42,7 @@ gem 'rerun'
 Once you create the file, run the command ``bundle install`` or just ``bundle``.
 
 
-The ``config.ru`` is boilerplate. Here is file that
+The ``config.ru`` is mostly boilerplate. Here is some code for that file.
 
 ```ruby
 require 'rubygems'
@@ -53,7 +53,7 @@ require './high_five_tracker'
 run HighFiveTracker
 ```
 
-Finally our initial app is just two lines
+Finally our initial app, ```high_five_tracker.rb``` is just two lines
 
 ```ruby
 class HighFiveTracker < Sinatra::Base
@@ -66,7 +66,7 @@ The default Sinatra port is 9292. Lets visit http://localhost:9292.
 
 ## Sinatra Routes
 
-To create a route all we need to do is use the HTTP verb, the path we want to use, and a ``do ... end`` block.
+To create a route in our app all we need to do is use the HTTP verb, the path we want to use, and a ``do ... end`` block.
 
 ```ruby
 	get '/' do
@@ -77,7 +77,7 @@ To create a route all we need to do is use the HTTP verb, the path we want to us
 Let's add some data and create a true index route. 
 
 ```ruby
-	@@team_members = [{name: "Fry", high5s: 3}, {name: "Professor", high5s: 1},{name: "Bender", high5s: -2}, {name: "Leela", high5s: 1001}]
+	@@team_members = [{"name" => "Fry", "high5s" => 3}, {"name" => "Professor", "high5s" => 1},{"name" => "Bender", "high5s" => -2}, {"name" => "Leela", "high5s" => 1001}]
 
 	get '/' do
 		@@team_members
@@ -87,7 +87,7 @@ Let's add some data and create a true index route.
 Does this code work?
 
 <details>
-Sinatra only displays strings if we have an object we want to display we need to explicitly call .to_s on the object.
+Sinatra only displays strings. If we have an object we want to display, we need to explicitly call .to_s on the object.
 
 ```ruby
 	@@team_members = [{name: "Fry", high5s: 3}, {name: "Professor", high5s: 1},{name: "Bender", high5s: -2}, {name: "Leela", high5s: 1001}]
@@ -100,23 +100,23 @@ Sinatra only displays strings if we have an object we want to display we need to
 
 ## Templating and ERB
 
-Since Sinatra only returns strings the templating engines become much more important. We can use Handlebars and directions to install 
-Handlebars is at the bottom of the page. However, we'll spend today working on another engine, ERB. 
+Since Sinatra only returns strings, the templating engines become much more important. One option is to keep using Handlebars, and directions to install 
+Handlebars are at the bottom of the page. However, we'll spend today working on another engine, ERB. 
 
-ERB stands for Embedded Ruby. It is the default templating engine for most Ruby frameworks so it's helpful to know it but many projects 
-will use another templating engine. Just like Handlebars we need to keep our templates in the ``views`` folder.
+ERB stands for Embedded Ruby. It is the default templating engine for most Ruby frameworks, so it's helpful to know it, but many projects 
+may use another templating engine. Just like Handlebars, we need to keep our templates in the ``views`` folder.
 
 Most of the text in an ERB file is not changed after processing the document. There are two exceptions based on the ``<%= %>`` and ``<% %>`` tags. 
 
 ### Printed Values
 To print a value in an ERB, use ``<%= %>``. Whatever the code inside the ``<%= %>`` evaluates to will be included in the file. Typically 
-this will be variable or a single method call on an object.
+this will be a variable or a single method call on an object.
 
 ### Non-printed Values
-Any Ruby code that we want to run but don't want to print on the screen, like for loops or other control structures.
+Any Ruby code that we want to run but don't want to print on the screen, like for loops or other control structures, gets wrapped in ``<% %>`` tags.
 
 Challenge: 
-Given an array of ``team_members`` of that are strings, write an ERB template which wraps the ``team_list`` array in a ``ul`` tag and 
+Given an array of ``team_members`` that are strings, write an ERB template which wraps the ``team_list`` array in a ``ul`` tag and 
 each team member in a ``li`` tag
 
 <details>
@@ -131,18 +131,18 @@ each team member in a ``li`` tag
 
 We can can use this template in our index route to create a nice HTML document.
 
-What would be the code we would add in the ``views/index.erb`` file to display all the team members:
+What would be the code we would add in the ``views/index.erb`` file to display all the team members' names and high5s?
 <details>
 ```ruby
 	<ul>
 		<% @team_members.each do |member| %>
-			<li><%= member[:name] %> &mdash; <%= member[:high5s] %> </li>
+			<li><%= member["name"] %> &mdash; <%= member["high5s"] %> </li>
 		<% end %>
 	</ul> 
 ```	
 </details>
 
-In the index route we need to do two things, add data to the ``@team_list`` variable and tell Sinatra which ERB file to use:
+Next, we need to do two things in our ``index`` route: add data to the ``@team_members`` variable and tell Sinatra which ERB file to use:
 
 ```ruby
 	get '/team_members' do
@@ -152,7 +152,7 @@ In the index route we need to do two things, add data to the ``@team_list`` vari
 ```
 
 ### Layouts 
-Just like Handlebars we can remove most of the boilerplate out to its own file called ``views/layout.erb``. Here instead of 
+Just like Handlebars, we can remove most of the boilerplate out to its own file called ``views/layout.erb``. Here instead of 
 ``{{{body}}}`` we use ``<%= yield %>``. 
 
 ```ruby
@@ -176,8 +176,8 @@ add them to the public folder.
 
 ## Request Body
 
-Just like Node, Sinatra can parse data coming from the request. However unlike Express, there isn't a default tool like body-parser
-to help us read the data. We'll need to work with lower level request data.
+Just like Node, Sinatra can parse data coming from a request. However, unlike Express, there isn't a default tool like body-parser
+to help us read the data. We'll need to work with lower-level request data.
 
 If we're trying to decode form data, we need to use the following code:
 ```ruby
@@ -202,7 +202,7 @@ In our app we add:
 	end
 ```
 
-And a view ``views/show.erb``:
+And a view ``views/new.erb``:
 
 ```html
 <form action='/team_members' method='POST'>
