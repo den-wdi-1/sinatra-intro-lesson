@@ -324,3 +324,7 @@ by coming back to the basic request/response cycle.
 * How do you create a post route on 'team_members' in Sinatra?
 * What is ERB? 
 * What is the difference between ``<%= %>`` and ``<% %>``?
+
+## Licensing
+All content is licensed under a CC­BY­NC­SA 4.0 license.
+All software code is licensed under GNU GPLv3. For commercial use or alternative licensing, please contact legal@ga.co.
